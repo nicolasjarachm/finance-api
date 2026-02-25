@@ -17,3 +17,7 @@ password: string;
   @CreateDateColumn()
   createdAt: Date;
 }
+
+// User entity, representa la tabla de usuarios en la base de datos
+// define las columnas y sus tipos de datos
+// es utilizado por el repositorio para realizar operaciones en la base de datos.
