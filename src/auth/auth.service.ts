@@ -32,3 +32,8 @@ export class AuthService {
     };
   }
 }
+
+// Auth service, maneja la autenticacion
+// se encarga de validar las credenciales del usuario
+// genera un token JWT (Jason Web Token) para el usuario autenticado
+// es inyectado en el controlador para ser utilizado en las rutas de autenticacion.

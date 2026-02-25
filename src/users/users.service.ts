@@ -27,3 +27,8 @@ export class UsersService {
       .getOne();
   }
 }
+
+// User services, maneja usuarios
+// se encarga de la logica de negocio
+// se comunica con la base de datos a traves del repositorio
+// es inyectado en el controlador para ser utilizado en las rutas.
