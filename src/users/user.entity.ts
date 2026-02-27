@@ -8,6 +8,11 @@ export class User {
   @Column({ unique: true })
   email: string;
 
+  //Column selecet false
+  //hace que el campo password no se incluya
+  //en las consultas por defecto,
+  //lo que mejora la seguridad al evitar
+  //exponer esta información sensible.
   @Column({ select: false })
 password: string;
 

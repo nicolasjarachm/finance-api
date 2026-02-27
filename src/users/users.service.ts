@@ -26,6 +26,13 @@ export class UsersService {
       .where('user.email = :email', { email })
       .getOne();
   }
+
+  async findById(id: number) {
+    return this.userRepository.findOne({
+      where: { id },
+    });
+}
+
 }
 
 // User services, maneja usuarios
