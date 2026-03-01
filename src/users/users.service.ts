@@ -10,6 +10,9 @@ export class UsersService {
     private userRepository: Repository<User>,
   ) {}
 
+  //userService.create()
+  //este método es lo que necesita el
+  //AuthService.register() para crear un nuevo usuario
   async create(userData: Partial<User>) {
     const user = this.userRepository.create(userData);
     return this.userRepository.save(user);
@@ -18,13 +21,15 @@ export class UsersService {
   async findAll() {
     return this.userRepository.find();
   }
-
+//.addSelect('user.password') ->
+//Esto protege el password en respuestas normales
+//solo lo muestra cuando lo necesita para login
   async findByEmail(email: string) {
-    return this.userRepository
-      .createQueryBuilder('user')
-      .addSelect('user.password')
-      .where('user.email = :email', { email })
-      .getOne();
+    return this.userRepository.findOne({
+      where: { email },
+      select: ['id', 'email', 'password', 'role'],
+    });
+
   }
 
   async findById(id: number) {

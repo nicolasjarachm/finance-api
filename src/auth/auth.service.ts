@@ -1,7 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, UnauthorizedException, ConflictException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../users/users.service';
 import * as bcrypt from 'bcrypt';
+import { RegisterDto } from './dto/register.dto';
 
 @Injectable()
 export class AuthService {
@@ -10,6 +11,30 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
+  // 🔹 REGISTER
+  async register(registerDto: RegisterDto) {
+    const { email, password } = registerDto;
+
+    // Verificar si el usuario ya existe
+    const existingUser = await this.usersService.findByEmail(email);
+    if (existingUser) {
+      throw new ConflictException('Email already registered');
+    }
+
+    // Hashear password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Crear usuario
+    const user = await this.usersService.create({
+      email,
+      password: hashedPassword,
+      role: 'user', // asignamos rol por defecto
+    });
+
+    return user;
+  }
+
+  // 🔹 VALIDATE USER (para login)
   async validateUser(email: string, password: string) {
     const user = await this.usersService.findByEmail(email);
 
@@ -22,9 +47,10 @@ export class AuthService {
     return user;
   }
 
+  // 🔹 LOGIN
   async login(user: any) {
-    const payload = { 
-      email: user.email, 
+    const payload = {
+      email: user.email,
       sub: user.id,
       role: user.role,
     };
@@ -34,8 +60,3 @@ export class AuthService {
     };
   }
 }
-
-// Auth service, maneja la autenticacion
-// se encarga de validar las credenciales del usuario
-// genera un token JWT (Jason Web Token) para el usuario autenticado
-// es inyectado en el controlador para ser utilizado en las rutas de autenticacion.
