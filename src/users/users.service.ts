@@ -21,9 +21,8 @@ export class UsersService {
   async findAll() {
     return this.userRepository.find();
   }
-//.addSelect('user.password') ->
-//Esto protege el password en respuestas normales
-//solo lo muestra cuando lo necesita para login
+
+  
   async findByEmail(email: string) {
     return this.userRepository.findOne({
       where: { email },
